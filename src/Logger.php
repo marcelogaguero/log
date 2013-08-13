@@ -9,9 +9,11 @@ namespace src;
 require_once(__DIR__."/config/environment.php");
 require_once(__DIR__."/FileManager.php");
 require_once(__DIR__."/LoggerDB.php");
+require_once(__DIR__."/LoggerEmail.php");
 
 use src\FileManager;
 use src\LoggerDB;
+use src\LoggerEmail;
 
 class Logger
 {
@@ -32,6 +34,10 @@ class Logger
         return LoggerDB::getInstance(ENVIRONMENT);
     }
 
+    static protected function getEmail(){
+        return LoggerEmail::getInstance(ENVIRONMENT);
+    }
+
     static public function log($label = null, $var, $flag = 2){
         try {
             $file = self::getFile();
@@ -40,9 +46,13 @@ class Logger
             file_put_contents($file->getFileName(), array(self::$types[$flag], " [", date("Y-m-d H:i:s"), "] ", $label, ": ", $var, PHP_EOL), FILE_APPEND);
 
             $loggerDb = self::getDb();
-
             if($loggerDb::isExecutable()){
                 $loggerDb::save($label, $var, self::$types[$flag]);
+            }
+
+            $loggerEmail = self::getEmail();
+            if($loggerEmail::isExecutable()){
+                $loggerEmail::send($label, $var, self::$types[$flag]);
             }
 
         } catch(\Exception $e) {

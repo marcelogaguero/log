@@ -22,7 +22,7 @@ class LoggerDB
 
     protected static function existTable(){
         $db = Config::getInstance(self::$environment)->getConfig('db_name');
-        $query = mysqli_query(self::$conexion, "SELECT TABLE_NAME FROM `information_schema`.`TABLES` WHERE TABLE_NAME = 'log_totator' AND TABLE_SCHEMA='".$db."'");
+        $query = mysqli_query(self::$conexion, "SELECT TABLE_NAME FROM `information_schema`.`TABLES` WHERE TABLE_NAME = 'log_rotator' AND TABLE_SCHEMA='".$db."'");
 
         $tablesExists = array();
         while( null!==($row=mysqli_fetch_row($query)) ){
