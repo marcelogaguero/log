@@ -10,7 +10,7 @@ require_once(__DIR__."/Config.php");
 
 use src\Config;
 
-class LoggerDB
+class DbManager
 {
     static protected $conexion;
     static protected $environment;
@@ -50,7 +50,7 @@ class LoggerDB
     public static function getInstance($env) {
         if (self::$instance == null) {
             
-            self::$instance = new LoggerDB();
+            self::$instance = new DbManager();
             self::$environment = $env;
             self::$isExecutable = (boolean) Config::getInstance(self::$environment)->getConfig('db_save');
 

@@ -8,12 +8,14 @@ namespace src;
 
 require_once(__DIR__."/config/environment.php");
 require_once(__DIR__."/FileManager.php");
-require_once(__DIR__."/LoggerDB.php");
-require_once(__DIR__."/LoggerEmail.php");
+require_once(__DIR__."/DbManager.php");
+require_once(__DIR__."/EmailManager.php");
+require_once(__DIR__."/EmailInterface.php");
 
 use src\FileManager;
-use src\LoggerDB;
-use src\LoggerEmail;
+use src\DbManager;
+use src\EmailManager;
+use src\EmailInterface;
 
 class Logger
 {
@@ -31,15 +33,16 @@ class Logger
     }
 
     static protected function getDb(){
-        return LoggerDB::getInstance(ENVIRONMENT);
+        return DbManager::getInstance(ENVIRONMENT);
     }
 
     static protected function getEmail(){
-        return LoggerEmail::getInstance(ENVIRONMENT);
+        return EmailManager::getInstance(ENVIRONMENT);
     }
 
-    static public function log($label = null, $var, $flag = 2){
+    static public function log($label = null, $var, $flag = 2, EmailInterface $sender = null){
         try {
+
             $file = self::getFile();
             $file->checkedFile();
 
@@ -52,11 +55,15 @@ class Logger
 
             $loggerEmail = self::getEmail();
             if($loggerEmail::isExecutable()){
-                $loggerEmail::send($label, $var, self::$types[$flag]);
+                if(!is_null($sender)){
+                    $loggerEmail::send($label, $var, self::$types[$flag], $sender);
+                } else {
+                    throw new \Exception("Debe enviar una instancia valida del parametro sender.");
+                }
             }
 
         } catch(\Exception $e) {
-            die(var_dump($e));
+            die($e->getMessage());
         }
     }
 }

@@ -50,7 +50,7 @@ class FileManager
 
         $file_number = Config::getInstance($this->environment)->getConfig('file_number');
         foreach($files as $file){
-            if(count($files) > $file_number){
+            if(count($files) >= $file_number){
                 $files = array_pop($files);
             }
         }
@@ -66,7 +66,7 @@ class FileManager
 
         $file = $this->getFileName();
         if(!$this->thereIsFile()){
-            $write = file_put_contents($file, "-- FILE ROTATOR ({$strDate})");
+            $write = file_put_contents($file, array("-- FILE ROTATOR ({$strDate})", PHP_EOL), FILE_APPEND);
             if(!$write) throw new \Exception("No se pudo guardar en el archivo de log, verifique permisos.");
 
             $modification = date ("Y_m_d");
@@ -80,7 +80,7 @@ class FileManager
             $rename = rename($file, $this->getFileNameBackup($modification));
             if(!$rename) throw new \Exception("No se pudo renombrar el archivo de log, verifique permisos.");
 
-            $write = file_put_contents($file, "-- FILE ROTATOR ({$strDate})");
+            $write = file_put_contents($file, array("-- FILE ROTATOR ({$strDate})", PHP_EOL), FILE_APPEND);
             if(!$write) throw new \Exception("No se pudo guardar en el archivo de log, verifique permisos.");
 
             $this->deleteLogs();

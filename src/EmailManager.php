@@ -7,10 +7,13 @@
 namespace src;
 
 require_once(__DIR__."/Config.php");
+require(__DIR__."/Smpt.php");
 
 use src\Config;
+use src\Smpt;
+use src\EmailInterface;
 
-class LoggerEmail
+class EmailManager
 {
     static protected $environment;
     static protected $isExecutable;
@@ -21,7 +24,7 @@ class LoggerEmail
     public static function getInstance($env) {
         if (self::$instance == null) {
 
-            self::$instance = new LoggerEmail();
+            self::$instance = new EmailManager();
             self::$environment = $env;
             self::$isExecutable = (boolean) Config::getInstance(self::$environment)->getConfig('email_send');
 
@@ -38,22 +41,23 @@ class LoggerEmail
 
     static private function createMessage($var, $flag){
         ob_start();
-        include __DIR__.DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR."email_template";
+
+        include __DIR__.DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR."email_template.php";
         $html = ob_get_clean();
         return $html;
     }
 
-    static public function send($label, $var, $flag){
+    static public function send($label, $var, $flag, $sender){
 
         $from = Config::getInstance(self::$environment)->getConfig('email_from');
         $to = Config::getInstance(self::$environment)->getConfig('email_to');
         $subject = Config::getInstance(self::$environment)->getConfig('subject')." - ".$label;
         $message = self::createMessage($var, $flag);
 
-        $headers = "From: " . strip_tags($from) . "\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+        $snd = $sender->send($from, $to, $subject, $message);
 
-        mail($to, $subject, $message, $headers);
+        if(!$snd) throw new \Exception("No se pudo enviar el correo verifique la configuración.");
+
+        return true;
     }
 }
