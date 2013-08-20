@@ -1,0 +1,25 @@
+LOGS ROTATOR
+============
+
+Componente para el manejo de logs, este componente permite realizar una rotación de los logs generando x cantidad de archivos de los los cuales son generados por cada día.
+También permite registrar los logs en un base de datos como tambien ser enviados por correo electronico.
+
+INSTALACIÓN
+===========
+
+PREREQUISITOS: Instalar o tener preinstaldo composer en el proyecto
+
+LINUX curl -sS https://getcomposer.org/installer | php WINDOWS C:> php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer '));"
+
+Configurar el archivo composer.json de la siguiente manera
+
+{ "repositories": [ { "type": "git", "url": "https://github.com/marcelogaguero/Debug.git" } ],
+
+"require": { "mga/dump": "master" },
+
+"minimum-stability": "dev" }
+
+USO
+===
+
+Ver ejemplo src/test/test1.php

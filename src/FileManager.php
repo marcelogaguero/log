@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by Nemogroup.
+ * Created by Wikdos.
  * @author: Marcelo Agüero <marcelo.aguero@nemogroup.net>
  * @since: 07/08/13 15:29
  */

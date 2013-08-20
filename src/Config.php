@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by Nemogroup.
+ * Created by Wikdos.
  *
  * @package mga/logrotator
  * @author: Marcelo Agüero <marcelogaguero@hotmail.com>

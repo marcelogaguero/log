@@ -2,7 +2,7 @@
     "name": "mga/logrotator",
     "description": "Component for managing log files with rotation.",
     "keywords": ["logs"],
-    "homepage": "https://github.com/marcelogaguero/log",
+    "homepage": "https://github.com/marcelogaguero/log/wiki",
     "type": "library",
     "license": "MIT",
     "authors": [{
